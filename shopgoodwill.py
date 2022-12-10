@@ -71,7 +71,34 @@ if __name__ == '__main__':
                    "calvin harris vinyl", 
                    "mac miller vinyl", 
                    "neighbourhood vinyl"]
-    
+
+
+    with open('grace.json') as f:
+        queryFile = json.load(f)
+        searchQuery = queryFile["query"]
+
+    while(True):
+        emailString = ""
+        for search in queryFile["searchQueries"]:
+            print('Searching for ' + search)
+            # Update JSON value here
+            searchQuery['searchText'] = search
+            searchResults = scriptClass.get_query_results(searchQuery)
+
+
+            for item in searchResults:
+                importantContent = (item['title'], item['currentPrice'], item['remainingTime'])
+                if item['itemId'] not in idTracker:
+                    emailString += str(importantContent)
+                    emailString += "\n"
+                    emailString += "https://shopgoodwill.com/item/" + str(item['itemId']) + '\n'
+                    idTracker.add(item['itemId'])
+        
+        scriptClass.send_email(emailString)
+        time.sleep(3600)
+
+
+    '''
     with open('query.json') as f:
         searchQuery = json.load(f)
 
@@ -94,3 +121,4 @@ if __name__ == '__main__':
         
         scriptClass.send_email(emailString)
         time.sleep(3600)
+    '''

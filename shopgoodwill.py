@@ -1,15 +1,14 @@
-import re
 import json
 import time
 import requests
 import yagmail
-from tqdm import tqdm
 import datetime
 
 from typing import Dict, List, Optional
 from requests.models import Response
 
 class Shopgoodwill:
+    # Using components of https://github.com/scottmconway/shopgoodwill-scripts
     API_ROOT = "https://buyerapi.shopgoodwill.com/api"
     
     def shopgoodwill_err_hook(self, res: Response, *args, **kwargs) -> None:
@@ -45,7 +44,7 @@ class Shopgoodwill:
                     return total_listings
 
     
-    def send_email(self, itemInfo):
+    def send_email(self, email, itemInfo):
         # using yagmail from https://github.com/kootenpv/yagmail#install
         yag = yagmail.SMTP('anthonywohlfeil@gmail.com', oauth2_file='oauth.json')
 
@@ -53,27 +52,18 @@ class Shopgoodwill:
         MONTH       = datetime.date.today().month    # the current month
         DATE        = datetime.date.today().day      # the current day
         HOUR        = datetime.datetime.now().hour   # the current hour
-        subjectTime = "New ShopGoodWill Listings - " + str(YEAR) + '/' + str(MONTH) + '/' + str(DATE) + '/' + str(HOUR)
+        subjectTime = "New ShopGoodWill Listings - " + str(YEAR) + '/' + str(MONTH) + '/' + str(DATE) + '-' + str(HOUR)
 
         if itemInfo != "":
-            yag.send('anthonywohlfeil@gmail.com', subject = subjectTime, contents = itemInfo)
+            yag.send(email, subject = subjectTime, contents = itemInfo)
 
 if __name__ == '__main__':
     scriptClass = Shopgoodwill()
     idTracker = set()
 
-    searchItems = ["post malone vinyl", 
-                   "frank ocean", 
-                   "weeknd vinyl",
-                   "dua lipa vinyl",
-                   "zayn vinyl", 
-                   "brockhampton vinyl", 
-                   "calvin harris vinyl", 
-                   "mac miller vinyl", 
-                   "neighbourhood vinyl"]
+    filename = input('Select a profile: ')
 
-
-    with open('grace.json') as f:
+    with open(filename) as f:
         queryFile = json.load(f)
         searchQuery = queryFile["query"]
 
@@ -94,31 +84,5 @@ if __name__ == '__main__':
                     emailString += "https://shopgoodwill.com/item/" + str(item['itemId']) + '\n'
                     idTracker.add(item['itemId'])
         
-        scriptClass.send_email(emailString)
-        time.sleep(3600)
-
-
-    '''
-    with open('query.json') as f:
-        searchQuery = json.load(f)
-
-    while(True):
-        emailString = ""
-        for search in searchItems:
-            print('Searching for ' + search)
-            # Update JSON value here
-            searchQuery['searchText'] = search
-            searchResults = scriptClass.get_query_results(searchQuery)
-
-
-            for item in searchResults:
-                importantContent = (item['title'], item['currentPrice'], item['remainingTime'])
-                if item['itemId'] not in idTracker:
-                    emailString += str(importantContent)
-                    emailString += "\n"
-                    emailString += "https://shopgoodwill.com/item/" + str(item['itemId']) + '\n'
-                    idTracker.add(item['itemId'])
-        
-        scriptClass.send_email(emailString)
-        time.sleep(3600)
-    '''
+        scriptClass.send_email(queryFile["email"], emailString)
+        time.sleep(21600)

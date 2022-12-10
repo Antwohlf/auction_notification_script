@@ -1,0 +1,6 @@
+pycryptodome
+gotify-handler
+parsedatetime
+python-daemon
+requests
+schedule

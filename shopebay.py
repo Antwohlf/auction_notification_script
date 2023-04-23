@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 def configure():
     load_dotenv()
 
-if __name__ == '__main__':
+def search_shopebay():
     configure()
     try:
         api = Connection(domain='svcs.ebay.com',appid=os.getenv('ebayauth'), config_file=None)
@@ -20,20 +20,45 @@ if __name__ == '__main__':
         assert(response.reply.ack == 'Success')
         assert(type(response.reply.timestamp) == datetime.datetime)
         assert(type(response.reply.searchResult.item) == list)
-
+        result = ""
+        title = ""
+        buyitnow = ""
+        condition = ""
+        watchers = ""
         for item in response.reply.searchResult.item:
-            print(f'Title: {item.title}, Price: {item.sellingStatus.currentPrice.value}')
-            print(f'Buy it now available: : {item.listingInfo.buyItNowAvailable}\n')
+            title = f'Title: {item.title}, Price: {item.sellingStatus.currentPrice.value}\n'
+            buyitnow = f'Buy it now available: : {item.listingInfo.buyItNowAvailable}\n'
             try:
-                print(f'Condition: {item.condition.conditionDisplayName}')
+                condition = f'Condition: {item.condition.conditionDisplayName}\n'
             except:
+                condition = ""
                 pass
             try:
-                print(f'Watchers: {item.listingInfo.watchCount}\n')
+                watchers = f'Watchers: {item.listingInfo.watchCount}\n\n'
             except:
+                watchers = ""
                 pass
+            # print(f'Title: {item.title}, Price: {item.sellingStatus.currentPrice.value}')
+            # print(f'Buy it now available: : {item.listingInfo.buyItNowAvailable}\n')
+            # try:
+            #     print(f'Condition: {item.condition.conditionDisplayName}')
+            # except:
+            #     pass
+            # try:
+            #     print(f'Watchers: {item.listingInfo.watchCount}\n')
+            # except:
+            #     pass
+            result += title + buyitnow + condition + watchers
+        
+        return result
+
 
 
     except ConnectionError as e:
         print(e)
         print(e.response.dict())
+    
+
+
+if __name__ == '__main__':
+    search_shopebay()

@@ -4,3 +4,6 @@ parsedatetime
 python-daemon
 requests
 schedule
+yagmail
+ebaysdk
+dotenv

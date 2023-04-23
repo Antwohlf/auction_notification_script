@@ -1,0 +1,7 @@
+{
+    "keywords": "example item",
+    "itemFilter": [
+        {"name": "currency", "value": "USD"},
+        {"name": "maxPrice", "value": 0}
+    ]
+}

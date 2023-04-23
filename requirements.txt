@@ -7,3 +7,4 @@ schedule
 yagmail
 ebaysdk
 python-dotenv
+clean-text

@@ -6,6 +6,8 @@ import time
 import json
 import os
 
+from cleantext import clean
+
 def send_email(email, item_info):
     # using yagmail from https://github.com/kootenpv/yagmail
     yag = yagmail.SMTP(os.getenv('email'), oauth2_file='oauth.json')
@@ -35,5 +37,5 @@ if __name__ == '__main__':
         email_string = result_goodwill + "\n" + result_ebay + "\n"
 
         #print("EMAIL STRING:" + email_string)
-        send_email(destination_email, email_string)
+        send_email(destination_email, clean(email_string, no_emoji=True))
         time.sleep(21600)

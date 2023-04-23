@@ -5,6 +5,8 @@ from ebaysdk.exception import ConnectionError
 from ebaysdk.finding import Connection
 from dotenv import load_dotenv
 
+# TODO add duplicate protection based on item id in url
+
 def configure():
     load_dotenv()
 

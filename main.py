@@ -22,15 +22,15 @@ def send_email(email, item_info):
         yag.send(email, subject = subject_time, contents = item_info)
 
 if __name__ == '__main__':
+    file_name = input('Select a profile: ')
+    with open(file_name) as f:
+        query_file = json.load(f)
+    
+    search_queries = query_file["searchQueries"]
+    destination_email = query_file["email"]
     while(True):
-        file_name = input('Select a profile: ')
-        with open(file_name) as f:
-            query_file = json.load(f)
-            search_queries = query_file["searchQueries"]
-            destination_email = query_file["email"]
-
         result_goodwill = shopgoodwill.search_shopgoodwill(search_queries)
-        #result_ebay = shopebay.search_shopebay()
+        result_ebay = shopebay.search_shopebay(search_queries)
         result_ebay = "Placeholder"
         email_string = result_goodwill + "\n" + result_ebay + "\n"
         send_email(destination_email, email_string)

@@ -3,7 +3,6 @@ import requests
 
 from typing import Dict, List, Optional
 from requests.models import Response
-from main import gw_dupes
 
 class Shopgoodwill:
     # using components of https://github.com/scottmconway/shopgoodwill-scripts
@@ -41,7 +40,7 @@ class Shopgoodwill:
                     return total_listings
                 
 
-def search_shopgoodwill(search_queries):
+def search_shopgoodwill(search_queries, gw_dupes):
     script_class = Shopgoodwill()
     # id_tracker = set()
 

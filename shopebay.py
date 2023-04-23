@@ -4,14 +4,13 @@ import os
 from ebaysdk.exception import ConnectionError
 from ebaysdk.finding import Connection
 from dotenv import load_dotenv
-from main import eb_dupes
 
 # TODO add duplicate protection based on item id in url
 
 def configure():
     load_dotenv()
 
-def search_shopebay(search_queries):
+def search_shopebay(search_queries, eb_dupes):
     configure()
     try:
         api = Connection(domain='svcs.ebay.com',appid=os.getenv('ebayauth'), config_file=None)

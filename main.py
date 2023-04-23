@@ -1,5 +1,5 @@
-import shopgoodwill
-import shopebay
+from shopgoodwill import search_shopgoodwill
+from shopebay import search_shopebay
 import yagmail
 import datetime
 import time
@@ -8,8 +8,6 @@ import os
 
 from cleantext import clean
 
-gw_dupes = set()
-eb_dupes = set()
 
 def send_email(email, item_info):
     # using yagmail from https://github.com/kootenpv/yagmail
@@ -34,10 +32,12 @@ if __name__ == '__main__':
     
     search_queries = query_file["searchQueries"]
     destination_email = query_file["email"]
+    gw_dupes = set()
+    eb_dupes = set()
     while(True):
         email_string = ""
-        result_goodwill = shopgoodwill.search_shopgoodwill(search_queries)
-        result_ebay = shopebay.search_shopebay(search_queries)
+        result_goodwill = search_shopgoodwill(search_queries, gw_dupes)
+        result_ebay = search_shopebay(search_queries, eb_dupes)
 
         email_string = "SHOPGOODWILL RESULTS:\n" + result_goodwill + "EBAY RESULTS:\n" + result_ebay + "\n"
 

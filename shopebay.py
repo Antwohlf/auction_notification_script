@@ -33,21 +33,21 @@ def search_shopebay(search_queries):
             watchers = ""
             for item in response.reply.searchResult.item:
                 try:
-                    condition = f'Condition: {item.condition.conditionDisplayName}\n'
+                    condition = f'Condition: {item.condition.conditionDisplayName}'
                 except:
                     condition = ""
                     pass
                 try:
-                    watchers = f'Watchers: {item.listingInfo.watchCount}\n\n'
+                    watchers = f'Watchers: {item.listingInfo.watchCount}\n'
                 except:
                     watchers = ""
                     pass
                 title = f'"{item.title}", ${item.sellingStatus.currentPrice.value}, {condition}, Watchers: {watchers}\n'
-                link = f'{item.viewItemURL}'
+                link = f'{item.viewItemURL}\n'
                 # buyitnow = f'Buy it now available: : {item.listingInfo.buyItNowAvailable}\n'
 
                 # result += title + buyitnow + condition + watchers
-                result = title + link
+                result += title + link
             
         return result
 

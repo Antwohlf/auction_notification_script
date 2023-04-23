@@ -25,6 +25,7 @@ def send_email(email, item_info):
 
 if __name__ == '__main__':
     file_name = input('Select a profile: ')
+    file_name = file_name + ".json"
     with open(file_name) as f:
         query_file = json.load(f)
     
@@ -34,8 +35,7 @@ if __name__ == '__main__':
         result_goodwill = shopgoodwill.search_shopgoodwill(search_queries)
         result_ebay = shopebay.search_shopebay(search_queries)
 
-        email_string = result_goodwill + "\n" + result_ebay + "\n"
+        email_string = "SHOPGOODWILL RESULTS:\n" + result_goodwill + "EBAY RESULTS:\n" + result_ebay + "\n"
 
-        #print("EMAIL STRING:" + email_string)
         send_email(destination_email, clean(email_string, no_emoji=True))
         time.sleep(21600)

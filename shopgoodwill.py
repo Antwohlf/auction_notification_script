@@ -49,14 +49,14 @@ def search_shopgoodwill(search_queries):
 
     email_string = ""
     for search in search_queries:
-        print('Searching for ' + search)
+        print('Searching shopgoodwill for ' + search)
         # Update JSON value for searching here
         search_query['searchText'] = search
         search_results = script_class.get_query_results(search_query)
         
 
         for item in search_results:
-            important_content = (item['title'], item['currentPrice'], item['remainingTime'])
+            important_content = (item['title'], "$" + str(item['currentPrice']), item['remainingTime'])
             if item['itemId'] not in id_tracker:
                 # urllib.request.urlretrieve("http://www.digimouth.com/news/media/2011/09/google-logo.jpg", "local-filename.jpg")
                 email_string += str(important_content) + "\n" + "https://shopgoodwill.com/item/" + str(item['itemId']) + '\n'

@@ -27,12 +27,11 @@ def search_shopebay(search_queries):
             assert(type(response.reply.timestamp) == datetime.datetime)
             assert(type(response.reply.searchResult.item) == list)
             title = ""
+            link = ""
             buyitnow = ""
             condition = ""
             watchers = ""
             for item in response.reply.searchResult.item:
-                title = f'Title: {item.title}, Price: {item.sellingStatus.currentPrice.value}\n'
-                buyitnow = f'Buy it now available: : {item.listingInfo.buyItNowAvailable}\n'
                 try:
                     condition = f'Condition: {item.condition.conditionDisplayName}\n'
                 except:
@@ -43,8 +42,12 @@ def search_shopebay(search_queries):
                 except:
                     watchers = ""
                     pass
-                
-                result += title + buyitnow + condition + watchers
+                title = f'"{item.title}", ${item.sellingStatus.currentPrice.value}, {condition}, Watchers: {watchers}\n'
+                link = f'{item.viewItemURL}'
+                # buyitnow = f'Buy it now available: : {item.listingInfo.buyItNowAvailable}\n'
+
+                # result += title + buyitnow + condition + watchers
+                result = title + link
             
         return result
 

@@ -2,6 +2,7 @@
     "keywords": "example item",
     "itemFilter": [
         {"name": "currency", "value": "USD"},
-        {"name": "maxPrice", "value": 0}
+        {"name": "maxPrice", "value": 999},
+        {"name": "paginationInput", "value": 10}
     ]
 }

@@ -14,12 +14,13 @@ def search_shopebay(search_queries):
     configure()
     try:
         api = Connection(domain='svcs.ebay.com',appid=os.getenv('ebayauth'), config_file=None)
-        with open('query.json') as file:
+        with open('examples/example_query_ebay.json') as file:
             payload = json.load(file)
         
         result = ""
         for search in search_queries:
             payload['keywords'] = search
+            print(f'Searching ebay for {search}')
             response = api.execute('findItemsAdvanced', payload)
 
             assert(response.reply.ack == 'Success')
@@ -45,7 +46,7 @@ def search_shopebay(search_queries):
                 
                 result += title + buyitnow + condition + watchers
             
-            return result
+        return result
 
     except ConnectionError as e:
         print(e)

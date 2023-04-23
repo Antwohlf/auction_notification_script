@@ -31,7 +31,9 @@ if __name__ == '__main__':
     while(True):
         result_goodwill = shopgoodwill.search_shopgoodwill(search_queries)
         result_ebay = shopebay.search_shopebay(search_queries)
-        result_ebay = "Placeholder"
+
         email_string = result_goodwill + "\n" + result_ebay + "\n"
+
+        #print("EMAIL STRING:" + email_string)
         send_email(destination_email, email_string)
         time.sleep(21600)

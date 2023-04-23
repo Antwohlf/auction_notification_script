@@ -18,6 +18,7 @@ def search_shopebay(search_queries):
             payload = json.load(file)
         
         result = ""
+        dupes = set()
         for search in search_queries:
             payload['keywords'] = search
             print(f'Searching ebay for {search}')
@@ -28,20 +29,25 @@ def search_shopebay(search_queries):
             assert(type(response.reply.searchResult.item) == list)
             title = ""
             link = ""
-            buyitnow = ""
+            # buyitnow = ""
             condition = ""
             watchers = ""
             for item in response.reply.searchResult.item:
+                id = item.itemId
+                if id in dupes:
+                    continue
+                else:
+                    dupes.add(id)
+                
                 try:
                     condition = f'Condition: {item.condition.conditionDisplayName}'
                 except:
                     condition = ""
-                    pass
                 try:
-                    watchers = f'Watchers: {item.listingInfo.watchCount}\n'
+                    watchers = f'Watchers: {item.listingInfo.watchCount}'
                 except:
                     watchers = ""
-                    pass
+                
                 title = f'"{item.title}", ${item.sellingStatus.currentPrice.value}, {condition}, Watchers: {watchers}\n'
                 link = f'{item.viewItemURL}\n'
                 # buyitnow = f'Buy it now available: : {item.listingInfo.buyItNowAvailable}\n'

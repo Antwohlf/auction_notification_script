@@ -3,6 +3,7 @@ import requests
 
 from typing import Dict, List, Optional
 from requests.models import Response
+from main import gw_dupes
 
 class Shopgoodwill:
     # using components of https://github.com/scottmconway/shopgoodwill-scripts
@@ -42,7 +43,7 @@ class Shopgoodwill:
 
 def search_shopgoodwill(search_queries):
     script_class = Shopgoodwill()
-    id_tracker = set()
+    # id_tracker = set()
 
     with open("shopgoodwill_query.json") as sgw_query:
         search_query = json.load(sgw_query)
@@ -57,10 +58,10 @@ def search_shopgoodwill(search_queries):
 
         for item in search_results:
             important_content = (item['title'], "$" + str(item['currentPrice']), item['remainingTime'])
-            if item['itemId'] not in id_tracker:
+            if item['itemId'] not in gw_dupes:
                 # urllib.request.urlretrieve("http://www.digimouth.com/news/media/2011/09/google-logo.jpg", "local-filename.jpg")
                 email_string += str(important_content) + "\n" + "https://shopgoodwill.com/item/" + str(item['itemId']) + '\n'
-                id_tracker.add(item['itemId'])
+                gw_dupes.add(item['itemId'])
     
     return email_string
         

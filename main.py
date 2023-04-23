@@ -8,6 +8,9 @@ import os
 
 from cleantext import clean
 
+gw_dupes = set()
+eb_dupes = set()
+
 def send_email(email, item_info):
     # using yagmail from https://github.com/kootenpv/yagmail
     yag = yagmail.SMTP(os.getenv('email'), oauth2_file='oauth.json')
@@ -32,6 +35,7 @@ if __name__ == '__main__':
     search_queries = query_file["searchQueries"]
     destination_email = query_file["email"]
     while(True):
+        email_string = ""
         result_goodwill = shopgoodwill.search_shopgoodwill(search_queries)
         result_ebay = shopebay.search_shopebay(search_queries)
 

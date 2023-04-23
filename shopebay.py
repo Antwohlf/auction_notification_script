@@ -4,6 +4,7 @@ import os
 from ebaysdk.exception import ConnectionError
 from ebaysdk.finding import Connection
 from dotenv import load_dotenv
+from main import eb_dupes
 
 # TODO add duplicate protection based on item id in url
 
@@ -18,7 +19,6 @@ def search_shopebay(search_queries):
             payload = json.load(file)
         
         result = ""
-        dupes = set()
         for search in search_queries:
             payload['keywords'] = search
             print(f'Searching ebay for {search}')
@@ -34,10 +34,10 @@ def search_shopebay(search_queries):
             watchers = ""
             for item in response.reply.searchResult.item:
                 id = item.itemId
-                if id in dupes:
+                if id in eb_dupes:
                     continue
                 else:
-                    dupes.add(id)
+                    eb_dupes.add(id)
                 
                 try:
                     condition = f'Condition: {item.condition.conditionDisplayName}'

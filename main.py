@@ -26,7 +26,7 @@ def send_email(email, item_info):
 
 if __name__ == '__main__':
     file_name = input('Select a profile: ')
-    file_name = file_name + ".json"
+    file_name = "profiles/" + file_name + ".json"
     with open(file_name) as f:
         query_file = json.load(f)
     

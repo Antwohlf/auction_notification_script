@@ -14,7 +14,7 @@ def search_shopebay(search_queries, eb_dupes):
     configure()
     try:
         api = Connection(domain='svcs.ebay.com',appid=os.getenv('ebayauth'), config_file=None)
-        with open('examples/example_query_ebay.json') as file:
+        with open('query_templates/query_ebay.json') as file:
             payload = json.load(file)
         
         result = ""

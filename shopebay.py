@@ -21,11 +21,13 @@ def search_shopebay(search_queries, eb_dupes):
         for search in search_queries:
             payload['keywords'] = search
             print(f'Searching ebay for {search}')
-            response = api.execute('findItemsAdvanced', payload)
-
-            assert(response.reply.ack == 'Success')
-            assert(type(response.reply.timestamp) == datetime.datetime)
-            assert(type(response.reply.searchResult.item) == list)
+            try:
+                response = api.execute('findItemsAdvanced', payload)
+            except:
+                continue
+            # assert(response.reply.ack == 'Success')
+            # assert(type(response.reply.timestamp) == datetime.datetime)
+            # assert(type(response.reply.searchResult.item) == list)
             title = ""
             link = ""
             # buyitnow = ""

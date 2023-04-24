@@ -1,5 +1,5 @@
-from shopgoodwill import search_shopgoodwill
-from shopebay import search_shopebay
+from src.shopgoodwill import search_shopgoodwill
+from src.shopebay import search_shopebay
 import yagmail
 import datetime
 import time

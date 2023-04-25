@@ -42,7 +42,6 @@ class Shopgoodwill:
 
 def search_shopgoodwill(search_queries, gw_dupes):
     script_class = Shopgoodwill()
-    # id_tracker = set()
 
     with open("query_templates/query_goodwill.json") as sgw_query:
         search_query = json.load(sgw_query)

@@ -1,17 +1,15 @@
-import datetime
 import json
 import os
 from ebaysdk.exception import ConnectionError
 from ebaysdk.finding import Connection
 from dotenv import load_dotenv
 
-# TODO add duplicate protection based on item id in url
-
 def configure():
     load_dotenv()
 
 def search_shopebay(search_queries, eb_dupes):
     configure()
+
     try:
         api = Connection(domain='svcs.ebay.com',appid=os.getenv('ebayauth'), config_file=None)
         with open('query_templates/query_ebay.json') as file:
@@ -25,9 +23,7 @@ def search_shopebay(search_queries, eb_dupes):
                 response = api.execute('findItemsAdvanced', payload)
             except:
                 continue
-            # assert(response.reply.ack == 'Success')
-            # assert(type(response.reply.timestamp) == datetime.datetime)
-            # assert(type(response.reply.searchResult.item) == list)
+
             title = ""
             link = ""
             # buyitnow = ""
@@ -49,19 +45,17 @@ def search_shopebay(search_queries, eb_dupes):
                 except:
                     watchers = ""
                 
-                title = f'"{item.title}", ${item.sellingStatus.currentPrice.value}, {condition}, Watchers: {watchers}\n'
+                title_price_condition_watchers = f'"{item.title}", ${item.sellingStatus.currentPrice.value}, {condition}, Watchers: {watchers}\n'
                 link = f'{item.viewItemURL}\n'
                 # buyitnow = f'Buy it now available: : {item.listingInfo.buyItNowAvailable}\n'
 
-                # result += title + buyitnow + condition + watchers
-                result += title + link
+                result += title_price_condition_watchers + link
             
         return result
 
     except ConnectionError as e:
         print(e)
         print(e.response.dict())
-    
 
 
 if __name__ == '__main__':

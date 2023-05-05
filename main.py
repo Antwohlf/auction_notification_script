@@ -12,7 +12,6 @@ import os
 # Craigslist - https://github.com/mislam/craigslist-api
 
 # TODO add section headers for content (xbox controller)
-# TODO add price filtering
 # TODO enable last minute notifications for auctions
 # TODO add photos in email
 

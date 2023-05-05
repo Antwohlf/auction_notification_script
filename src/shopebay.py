@@ -17,7 +17,8 @@ def search_shopebay(search_queries, eb_dupes):
         
         result = ""
         for search in search_queries:
-            payload['keywords'] = search
+            payload['keywords'] = search[0]
+            payload['maxPrice'] = search[1]
             print(f'Searching ebay for {search}')
             try:
                 response = api.execute('findItemsAdvanced', payload)

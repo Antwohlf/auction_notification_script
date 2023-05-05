@@ -3,6 +3,7 @@
     "itemFilter": [
         {"name": "currency", "value": "USD"},
         {"name": "maxPrice", "value": 999},
-        {"name": "paginationInput", "value": 10}
+        {"name": "paginationInput", "value": 10},
+        {"name": "ListingType", "value": "FixedPrice"}
     ]
 }

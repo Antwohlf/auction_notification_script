@@ -48,9 +48,10 @@ def search_shopgoodwill(search_queries, gw_dupes):
 
     email_string = ""
     for search in search_queries:
-        print('Searching shopgoodwill for ' + search)
+        print('Searching shopgoodwill for ' + search[0])
         # Update JSON value for searching here
-        search_query['searchText'] = search
+        search_query['searchText'] = search[0]
+        search_query['highPrice'] = search[1]
         search_results = script_class.get_query_results(search_query)
         
 

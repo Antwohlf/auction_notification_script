@@ -18,8 +18,9 @@ def search_shopebay(search_queries, eb_dupes):
         result = ""
         for search in search_queries:
             payload['keywords'] = search[0]
-            payload['maxPrice'] = search[1]
-            print(f'Searching ebay for {search}')
+            payload['itemFilter'][1]["value"] = search[1]
+            print('Searching ebay for ' + search[0])
+
             try:
                 response = api.execute('findItemsAdvanced', payload)
             except:
@@ -32,7 +33,7 @@ def search_shopebay(search_queries, eb_dupes):
             watchers = ""
             for item in response.reply.searchResult.item:
                 id = item.itemId
-                if id in eb_dupes:
+                if not (float(item.sellingStatus.currentPrice.value)) < float(search[1]) or (id in eb_dupes):
                     continue
                 else:
                     eb_dupes.add(id)
@@ -50,7 +51,8 @@ def search_shopebay(search_queries, eb_dupes):
                 link = f'{item.viewItemURL}\n'
                 # buyitnow = f'Buy it now available: : {item.listingInfo.buyItNowAvailable}\n'
 
-                result += title_price_condition_watchers + link
+                if not (float(item.sellingStatus.currentPrice.value) > float(search[1])):
+                    result += title_price_condition_watchers + link
             
         return result
 

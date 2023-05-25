@@ -46,8 +46,12 @@ def search_shopebay(search_queries, eb_dupes):
                     watchers = f'Watchers: {item.listingInfo.watchCount}'
                 except:
                     watchers = ""
+                try:
+                    endtime = f'Ends on {item.listingInfo.endTime.strftime("%m/%d/%Y at %H:%M:%S UTC")}'
+                except:
+                    endtime = ""
                 
-                title_price_condition_watchers = f'"{item.title}", ${item.sellingStatus.currentPrice.value}, {condition}, Watchers: {watchers}\n'
+                title_price_condition_watchers = f'"{item.title}", ${item.sellingStatus.currentPrice.value}, {condition}, {watchers}, {endtime}\n'
                 link = f'{item.viewItemURL}\n'
                 # buyitnow = f'Buy it now available: : {item.listingInfo.buyItNowAvailable}\n'
 

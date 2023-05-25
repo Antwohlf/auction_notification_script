@@ -22,8 +22,8 @@ def send_email(email, item_info):
     YEAR        = datetime.date.today().year     # the current year
     MONTH       = datetime.date.today().month    # the current month
     DATE        = datetime.date.today().day      # the current day
-    HOUR        = datetime.datetime.now().hour   # the current hour
-    subject_time = "New ShopGoodWill Listings - " + str(YEAR) + '/' + str(MONTH) + '/' + str(DATE) + '-' + str(HOUR)
+    HOUR        = datetime.datetime.now().strftime("%H")   # the current hour
+    subject_time = "New GoodWill/Ebay Listings " + str(MONTH) + '/' + str(DATE) + '/' + str(YEAR) + ' - ' + str(HOUR) + ":00 UTC"
 
     # contents = [yagmail.inline("/path/to/local/image")] to add images later on
 
@@ -46,7 +46,7 @@ if __name__ == '__main__':
         result_ebay = search_shopebay(search_queries, eb_dupes)
 
         email_string = ""
-        email_string = "SHOPGOODWILL RESULTS:\n" + result_goodwill + "EBAY RESULTS:\n" + result_ebay + "\n"
+        email_string = "<h3 style='text-transform: uppercase;'>ShopGoodWill Results:</h3>\n" + result_goodwill + "<h3 style='text-transform: uppercase;'>Ebay Results:</h3>\n" + result_ebay + "\n"
 
         send_email(destination_email, clean(email_string, no_emoji=True))
         time.sleep(21600)

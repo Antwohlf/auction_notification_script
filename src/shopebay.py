@@ -31,7 +31,13 @@ def search_shopebay(search_queries, eb_dupes):
             # buyitnow = ""
             condition = ""
             watchers = ""
-            for item in response.reply.searchResult.item:
+            # Sort the items by end time in ascending order (Ending Soonest)
+            sorted_items = sorted(response.reply.searchResult.item, key=lambda item: item.listingInfo.endTime)
+
+            if sorted_items:
+                result += '<strong>' + str(search[0]) + '</strong>\n'
+
+            for item in sorted_items:
                 id = item.itemId
                 if not (float(item.sellingStatus.currentPrice.value)) < float(search[1]) or (id in eb_dupes):
                     continue

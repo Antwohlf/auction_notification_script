@@ -54,9 +54,14 @@ def search_shopgoodwill(search_queries, gw_dupes):
         search_query['searchText'] = search[0]
         search_query['highPrice'] = search[1]
         search_results = script_class.get_query_results(search_query)
-        
 
-        for item in search_results:
+        # Sort the search results by endTime in ascending order (Ending Soonest)
+        sorted_results = sorted(search_results, key=lambda item: item['endTime'])
+
+        if sorted_results:
+            email_string += '<strong>' + str(search_query['searchText']) + '</strong>\n'
+
+        for item in sorted_results:
             # Parse the datetime string and format the datetime object as desired
             datetime_obj = datetime.datetime.fromisoformat(item['endTime'])
             formatted_datetime = datetime_obj.strftime("Ends on %m/%d/%Y at %H:%M:%S UTC")
@@ -66,8 +71,9 @@ def search_shopgoodwill(search_queries, gw_dupes):
                 # urllib.request.urlretrieve("http://www.digimouth.com/news/media/2011/09/google-logo.jpg", "local-filename.jpg")
                 email_string += str(important_content) + "\n" + "https://shopgoodwill.com/item/" + str(item['itemId']) + '\n'
                 gw_dupes.add(item['itemId'])
-    
+
     return email_string
+
         
 
 if __name__ == '__main__':

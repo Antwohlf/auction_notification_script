@@ -10,10 +10,12 @@ import os
 # Potential TODO paths for expansion
 # Facebook - https://github.com/JustSxm/Deals-Scraper
 # Craigslist - https://github.com/mislam/craigslist-api
+# AliExpress - https://blog.adnansiddiqi.me/develop-ali-express-scraper-in-python-with-scraper-api/
 
-# TODO add section headers for content (xbox controller)
+# TODO link on auction end date to add to google calendar
 # TODO enable last minute notifications for auctions
 # TODO add photos in email
+
 
 def send_email(email, item_info):
     # using yagmail from https://github.com/kootenpv/yagmail

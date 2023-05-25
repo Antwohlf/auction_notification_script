@@ -10,6 +10,7 @@ We are currently testing methods for other sites such as StockX and Craigslist a
 - Run 'pip3 install -r requirements.txt'
 - Set up a name.json file for your desired searches profile using the profile.json example from the repo as a reference
   - The format is ["item", maxPrice] where the first argument is a string for the search term and the second is the max price to be filtered
+  - Include your email in the "email" section so the script knows where to send the notifications
 
 ### ShopGoodWill Config
 This should require no auth config on the user's side.

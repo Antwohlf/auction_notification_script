@@ -16,7 +16,6 @@ import os
 # TODO enable last minute notifications for auctions
 # TODO add photos in email
 
-
 def send_email(email, item_info):
     # using yagmail from https://github.com/kootenpv/yagmail
     yag = yagmail.SMTP(os.getenv('email'), oauth2_file='oauth.json')
@@ -27,10 +26,19 @@ def send_email(email, item_info):
     HOUR        = datetime.datetime.now().strftime("%H")   # the current hour
     subject_time = "New GoodWill/Ebay Listings " + str(MONTH) + '/' + str(DATE) + '/' + str(YEAR) + ' - ' + str(HOUR) + ":00 UTC"
 
-    # contents = [yagmail.inline("/path/to/local/image")] to add images later on
+    # contents can be a list of elements including strings and yagmail.inline objects
+    contents = []
+    for line in item_info.split('\n'):
+        if line.startswith('IMGURL:'):
+            # The line is an image URL, so add it as an HTML img tag with specified width and height
+            img_url = line[7:]
+            contents.append(f'<img src="{img_url}" alt="Image" width="200" height="200">')
+        else:
+            # The line is not an image URL, so add it as a string
+            contents.append(line)
 
-    if item_info != "":
-        yag.send(email, subject = subject_time, contents = item_info)
+    if contents:
+        yag.send(email, subject = subject_time, contents = contents)
 
 if __name__ == '__main__':
     profile_name = input('Select a profile: ')
@@ -50,5 +58,5 @@ if __name__ == '__main__':
         email_string = ""
         email_string = "<h3 style='text-transform: uppercase;'>ShopGoodWill Results:</h3>\n" + result_goodwill + "<h3 style='text-transform: uppercase;'>Ebay Results:</h3>\n" + result_ebay + "\n"
 
-        send_email(destination_email, clean(email_string, no_emoji=True))
+        send_email(destination_email, email_string)
         time.sleep(21600)

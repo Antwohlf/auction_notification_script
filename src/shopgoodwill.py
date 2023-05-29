@@ -1,6 +1,7 @@
 import json
 import requests
 import datetime
+import re
 
 from typing import Dict, List, Optional
 from requests.models import Response
@@ -40,6 +41,13 @@ class Shopgoodwill:
                 if (len(total_listings) == query_res.json()["searchResults"]["itemCount"]):
                     return total_listings
                 
+    def transform_url(self, url):
+        url = url.replace('\\', '/')
+        current_month = datetime.datetime.now().strftime('%m')  # Get current month as string
+        url = re.sub(r'(t\d)\.jpeg', r'1.jpg', url)
+        url = re.sub(r'/items-', f'/Items/{current_month}-', url)  # Insert current month into URL
+        return url
+                
 
 def search_shopgoodwill(search_queries, gw_dupes):
     script_class = Shopgoodwill()
@@ -69,7 +77,7 @@ def search_shopgoodwill(search_queries, gw_dupes):
             important_content = (item['title'], "$" + str(item['currentPrice']), formatted_datetime)
             if item['itemId'] not in gw_dupes:
                 # urllib.request.urlretrieve("http://www.digimouth.com/news/media/2011/09/google-logo.jpg", "local-filename.jpg")
-                email_string += str(important_content) + "\n" + "https://shopgoodwill.com/item/" + str(item['itemId']) + '\n'
+                email_string += "IMGURL:" + script_class.transform_url(item['imageURL']) + "\n" + str(important_content) + "\n" + "https://shopgoodwill.com/item/" + str(item['itemId']) + '\n'
                 gw_dupes.add(item['itemId'])
 
     return email_string

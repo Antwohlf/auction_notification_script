@@ -14,7 +14,6 @@ import os
 
 # TODO link on auction end date to add to google calendar
 # TODO enable last minute notifications for auctions
-# TODO add photos in email
 
 def send_email(email, item_info):
     # using yagmail from https://github.com/kootenpv/yagmail

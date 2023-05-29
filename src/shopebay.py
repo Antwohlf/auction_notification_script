@@ -62,7 +62,7 @@ def search_shopebay(search_queries, eb_dupes):
                 # buyitnow = f'Buy it now available: : {item.listingInfo.buyItNowAvailable}\n'
 
                 if not (float(item.sellingStatus.currentPrice.value) > float(search[1])):
-                    result += title_price_condition_watchers + link
+                    result += "IMGURL:" + item.galleryURL + '\n' + title_price_condition_watchers + link
             
         return result
 

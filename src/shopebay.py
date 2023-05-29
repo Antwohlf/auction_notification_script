@@ -32,9 +32,9 @@ def search_shopebay(search_queries, eb_dupes):
             condition = ""
             watchers = ""
             # Sort the items by end time in ascending order (Ending Soonest)
-            sorted_items = sorted(response.reply.searchResult.item, key=lambda item: item.listingInfo.endTime)
 
-            if sorted_items:
+            if int(response.reply.searchResult._count) != 0:
+                sorted_items = sorted(response.reply.searchResult.item, key=lambda item: item.listingInfo.endTime)
                 result += '<strong>' + str(search[0]) + '</strong>\n'
 
             for item in sorted_items:

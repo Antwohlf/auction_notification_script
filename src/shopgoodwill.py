@@ -74,10 +74,15 @@ def search_shopgoodwill(search_queries, gw_dupes):
             datetime_obj = datetime.datetime.fromisoformat(item['endTime'])
             formatted_datetime = datetime_obj.strftime("Ends on %m/%d/%Y at %H:%M:%S UTC")
 
+            # Format the datetime for Google Calendar
+            google_calendar_datetime = datetime_obj.strftime("%Y%m%dT%H%M%SZ")
+
             important_content = (item['title'], "$" + str(item['currentPrice']), formatted_datetime)
             if item['itemId'] not in gw_dupes:
                 # urllib.request.urlretrieve("http://www.digimouth.com/news/media/2011/09/google-logo.jpg", "local-filename.jpg")
-                email_string += "IMGURL:" + script_class.transform_url(item['imageURL']) + "\n" + str(important_content) + "\n" + "https://shopgoodwill.com/item/" + str(item['itemId']) + '\n'
+                email_string += "IMGURL:" + script_class.transform_url(item['imageURL']) + "\n" 
+                email_string += "AUCTIONEND:" + google_calendar_datetime + '\n'
+                email_string += str(important_content) + "\n" + "https://shopgoodwill.com/item/" + str(item['itemId']) + '\n'
                 gw_dupes.add(item['itemId'])
 
     return email_string

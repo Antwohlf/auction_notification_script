@@ -32,6 +32,12 @@ def send_email(email, item_info):
             # The line is an image URL, so add it as an HTML img tag with specified width and height
             img_url = line[7:]
             contents.append(f'<img src="{img_url}" alt="Image" width="200" height="200">')
+        elif line.startswith('AUCTIONEND:'):
+            # The line is an auction end time, so add it as a Google Calendar event link
+            auction_end = line[12:]
+            event_name = 'Auction+End'
+            event_url = f'https://www.google.com/calendar/render?action=TEMPLATE&text={event_name}&dates={auction_end}/{auction_end}'
+            contents.append(f'<a href="{event_url}">Add to Google Calendar</a>')
         else:
             # The line is not an image URL, so add it as a string
             contents.append(line)

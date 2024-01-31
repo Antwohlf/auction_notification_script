@@ -47,6 +47,9 @@ class Shopgoodwill:
         url = re.sub(r'(t\d)\.jpeg', r'1.jpg', url)
         url = re.sub(r'/items-', f'/Items/{current_month}-', url)  # Insert current month into URL
         return url
+    
+    def generate_results_object(self, search_queries):
+        return True
                 
 
 def search_shopgoodwill(search_queries, gw_dupes):
@@ -69,6 +72,8 @@ def search_shopgoodwill(search_queries, gw_dupes):
         if sorted_results:
             email_string += '<strong>' + str(search_query['searchText']) + '</strong>\n'
 
+        item_list = []
+
         for item in sorted_results:
             # Parse the datetime string and format the datetime object as desired
             datetime_obj = datetime.datetime.fromisoformat(item['endTime'])
@@ -77,15 +82,29 @@ def search_shopgoodwill(search_queries, gw_dupes):
             # Format the datetime for Google Calendar
             google_calendar_datetime = datetime_obj.strftime("%Y%m%dT%H%M%SZ")
 
+            item_json = {}
+
             important_content = (item['title'], "$" + str(item['currentPrice']), formatted_datetime)
             if item['itemId'] not in gw_dupes:
                 # urllib.request.urlretrieve("http://www.digimouth.com/news/media/2011/09/google-logo.jpg", "local-filename.jpg")
                 email_string += "IMGURL:" + script_class.transform_url(item['imageURL']) + "\n" 
+                item_json["IMGURL"] = script_class.transform_url(item['imageURL'])
                 email_string += "AUCTIONEND:" + google_calendar_datetime + '\n'
-                email_string += str(important_content) + "\n" + "https://shopgoodwill.com/item/" + str(item['itemId']) + '\n'
-                gw_dupes.add(item['itemId'])
+                item_json["AUCTIONEND"] = google_calendar_datetime
+                email_string += "LINK:" + "https://shopgoodwill.com/item/" + str(item['itemId'])
+                item_json["LINK"] = "https://shopgoodwill.com/item/" + str(item['itemId'])
+                email_string += "TITLE:" + item['title']
+                item_json["TITLE"] = item['title']
 
-    return email_string
+                item_json["PRICE"] = item['currentPrice']
+
+                email_string += str(important_content) + "\n"
+                gw_dupes.add(item['itemId'])
+                item_list.append(item_json)
+            
+
+    #return email_string
+    return item_list
 
         
 

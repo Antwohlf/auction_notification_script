@@ -60,7 +60,7 @@ def search_shopebay(search_queries, eb_dupes):
                     endtime = "None"
                 
                 title_price_condition_watchers = f'"{item.title}", ${item.sellingStatus.currentPrice.value}, {condition}, {watchers}, {endtime}\n'
-                link = f'{item.viewItemURL}\n'
+                link = f'{item.viewItemURL}\n'.rstrip()
                 # buyitnow = f'Buy it now available: : {item.listingInfo.buyItNowAvailable}\n'
 
                 # If item price in acceptable range

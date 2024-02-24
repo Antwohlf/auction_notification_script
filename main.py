@@ -26,7 +26,7 @@ def send_email(email, item_info):
         MONTH       = datetime.date.today().month    # the current month
         DATE        = datetime.date.today().day      # the current day
         HOUR        = datetime.datetime.now().strftime("%H")   # the current hour
-        subject_time = "New GoodWill/Ebay Listings " + str(MONTH) + '/' + str(DATE) + '/' + str(YEAR) + ' - ' + str(HOUR) + ":00 UTC"
+        subject_time = "New Goodwill/Ebay Listings" + " " + str(MONTH) + '/' + str(DATE) + '/' + str(YEAR) + ' - ' + str(HOUR) + ":00 UTC"
 
         # contents can be a list of elements including strings and yagmail.inline objects
         contents = []
@@ -72,7 +72,7 @@ def send_email_standardized(destination_email, results_shopgoodwill, results_eba
     DATE        = datetime.date.today().day                # the current day
     HOUR        = datetime.datetime.now().strftime("%H")   # the current hour
     time_string = str(MONTH) + '/' + str(DATE) + '/' + str(YEAR) + ' - ' + str(HOUR) + ":00 UTC"
-    subject_time = "New GoodWill/Ebay Listings" + time_string
+    subject_time = "New Goodwill/Ebay Listings " + time_string
 
     # contents can be a list of elements including strings and yagmail.inline objects
     contents = []
@@ -113,10 +113,11 @@ def send_email_standardized(destination_email, results_shopgoodwill, results_eba
             contents.append(f'<a href="{link}">' + title + '</a>')
 
             price = item["PRICE"]
-            contents.append("Price: " + price)
+            contents.append("Current Price: " + price)
 
             auction_end = item["AUCTIONEND"]
             event_name = 'Auction+End'
+            contents.append("Auction End:" + auction_end)
             event_url = f'https://www.google.com/calendar/render?action=TEMPLATE&text={event_name}&dates={auction_end}/{auction_end}'
             contents.append(f'<a href="{event_url}">Add to Google Calendar</a>') 
     except Exception as e:
@@ -137,18 +138,7 @@ if __name__ == '__main__':
         search_queries = profile["searchQueries"]
         destination_email = profile["email"]
 
-        # OLD RESULTS FORMAT (COMMENT THIS OUT)
-        '''
-        result_goodwill = search_shopgoodwill(search_queries, gw_dupes)
-        result_ebay = search_shopebay(search_queries, eb_dupes)
-        result_ebay = ""
 
-        email_string = ""
-        email_string += "<h3 style='text-transform: uppercase;'>ShopGoodWill Results:</h3>\n" + result_goodwill 
-        email_string += "<h3 style='text-transform: uppercase;'>Ebay Results:</h3>\n" + result_ebay + "\n"
-
-        send_email(destination_email, email_string)
-        '''
 
         # NEW RESULTS FORMAT
         results_shopgoodwill = search_shopgoodwill(search_queries, gw_dupes)

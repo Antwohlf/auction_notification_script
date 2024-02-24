@@ -87,13 +87,9 @@ def search_shopgoodwill(search_queries, gw_dupes):
             important_content = (item['title'], "$" + str(item['currentPrice']), formatted_datetime)
             if item['itemId'] not in gw_dupes:
                 # urllib.request.urlretrieve("http://www.digimouth.com/news/media/2011/09/google-logo.jpg", "local-filename.jpg")
-                email_string += "IMGURL:" + script_class.transform_url(item['imageURL']) + "\n" 
                 item_json["IMGURL"] = script_class.transform_url(item['imageURL'])
-                email_string += "AUCTIONEND:" + google_calendar_datetime + '\n'
                 item_json["AUCTIONEND"] = google_calendar_datetime
-                email_string += "LINK:" + "https://shopgoodwill.com/item/" + str(item['itemId'])
                 item_json["LINK"] = "https://shopgoodwill.com/item/" + str(item['itemId'])
-                email_string += "TITLE:" + item['title']
                 item_json["TITLE"] = item['title']
 
                 item_json["PRICE"] = item['currentPrice']
@@ -103,7 +99,6 @@ def search_shopgoodwill(search_queries, gw_dupes):
                 item_list.append(item_json)
             
 
-    #return email_string
     return item_list
 
         

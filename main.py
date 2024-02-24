@@ -1,5 +1,6 @@
 from src.shopgoodwill import search_shopgoodwill
 from src.shopebay import search_shopebay
+from src.shopcraigslist import search_shopcraigslist
 from cleantext import clean
 import yagmail
 import datetime
@@ -63,7 +64,7 @@ def send_email(email, item_info):
         print(f"Failed to send email. Error: {e}")
 
 ## TODO FIX this naming when the above function is deleted
-def send_email_standardized(destination_email, results_shopgoodwill, results_ebay):
+def send_email_standardized(destination_email, results_shopgoodwill, results_ebay, results_shopcraigslist):
     # using yagmail from https://github.com/kootenpv/yagmail
     yag = yagmail.SMTP(os.getenv('email'), oauth2_file='oauth.json')
 
@@ -123,13 +124,36 @@ def send_email_standardized(destination_email, results_shopgoodwill, results_eba
     except Exception as e:
         print(f"Issue encountered with Ebay script - Error: {e}")
 
+    # SHOPCRAIGSLIST RUN
+    contents.append("<h3 style='text-transform: uppercase;'>ShopGoodWill Results:</h3>\n")
+    try:
+        for item in results_shopcraigslist:
+            # The line is an image URL, so add it as an HTML img tag with specified width and height
+            img_url = item["IMGURL"]
+            contents.append(f'<img src="{img_url}" alt="Image" width="200" height="200">')
+
+            title = item["TITLE"]
+            link = item["LINK"]
+            contents.append(f'<a href="{link}">' + title + '</a>')
+
+            price = item["PRICE"]
+            contents.append("Price: " + str(price))
+
+            auction_end = item["AUCTIONEND"]
+            event_name = 'Auction+End'
+            event_url = f'https://www.google.com/calendar/render?action=TEMPLATE&text={event_name}&dates={auction_end}/{auction_end}'
+            contents.append(f'<a href="{event_url}">Add to Google Calendar</a>') 
+    except Exception as e:
+        print(f"Issue encountered with ShopGoodwill script - Error: {e}")
+
+
     if contents:
         yag.send(destination_email, subject = subject_time, contents = contents)
 
 if __name__ == '__main__':
     profile_name = input('Select a profile: ')
     profile_path = "profiles/" + profile_name + ".json"
-    gw_dupes, eb_dupes = set(), set()
+    gw_dupes, eb_dupes, cl_dupes = set(), set(), set()
 
     while(True):
         with open(profile_path) as f:
@@ -143,7 +167,8 @@ if __name__ == '__main__':
         # NEW RESULTS FORMAT
         results_shopgoodwill = search_shopgoodwill(search_queries, gw_dupes)
         results_ebay = search_shopebay(search_queries, eb_dupes)
-
+        results_craigslist = search_shopcraigslist(search_queries, cl_dupes)
+        
         send_email_standardized(destination_email, results_shopgoodwill, results_ebay)
 
         time.sleep(21600)

@@ -3,12 +3,12 @@ import json
 from bs4 import BeautifulSoup
 
 def search_shopcraigslist(search_queries, cl_dupes):
-    with open('query_templates/query_craiglist.json') as file:
+    with open('query_templates/query_craigslist.json') as file:
       payload = json.load(file)   
-      for search_query in search_queries:
-        base_url = f"https://{payload['location']}.craigslist.org/search/{payload['category']}"
-        params = {'query': search_query['search_query']}
-        
+      for search_query in search_queries[0]:
+        base_url = f"https://{payload['location']}.craigslist.org/search/"
+        params = {'query': search_query, 'excats': 'hhh,housing,jjj,hss,bbb,sss,apa'}
+        print('Searching craigslist for ' + search_query)
         response = requests.get(base_url, params=params)
         if response.status_code == 200:
             soup = BeautifulSoup(response.content, 'html.parser')

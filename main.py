@@ -125,7 +125,7 @@ def send_email_standardized(destination_email, results_shopgoodwill, results_eba
         print(f"Issue encountered with Ebay script - Error: {e}")
 
     # SHOPCRAIGSLIST RUN
-    contents.append("<h3 style='text-transform: uppercase;'>ShopGoodWill Results:</h3>\n")
+    contents.append("<h3 style='text-transform: uppercase;'>ShopCraigslist Results:</h3>\n")
     try:
         for item in results_shopcraigslist:
             # The line is an image URL, so add it as an HTML img tag with specified width and height
@@ -144,7 +144,7 @@ def send_email_standardized(destination_email, results_shopgoodwill, results_eba
             event_url = f'https://www.google.com/calendar/render?action=TEMPLATE&text={event_name}&dates={auction_end}/{auction_end}'
             contents.append(f'<a href="{event_url}">Add to Google Calendar</a>') 
     except Exception as e:
-        print(f"Issue encountered with ShopGoodwill script - Error: {e}")
+        print(f"Issue encountered with ShopCraigslist script - Error: {e}")
 
 
     if contents:
@@ -169,6 +169,6 @@ if __name__ == '__main__':
         results_ebay = search_shopebay(search_queries, eb_dupes)
         results_craigslist = search_shopcraigslist(search_queries, cl_dupes)
         
-        send_email_standardized(destination_email, results_shopgoodwill, results_ebay)
+        send_email_standardized(destination_email, results_shopgoodwill, results_ebay, results_craigslist)
 
         time.sleep(21600)

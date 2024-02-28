@@ -1,4 +1,5 @@
 import json
+import datetime
 import os
 from ebaysdk.exception import ConnectionError
 from ebaysdk.finding import Connection
@@ -14,6 +15,7 @@ class ShopEbay:
     def __init__(self):
         self.json_entries = []
         self.payload = {}
+        self.log_file = f"EBAY_{datetime.datetime.now().strftime('[%m:%d:%Y, %H]')}"
         
     def load_payload(self):
         with open('query_templates/query_ebay.json') as file:
@@ -47,6 +49,16 @@ class ShopEbay:
         
         return condition, watchers, endtime
     
+    def log_entry(self, title, id):
+        current_time = datetime.datetime.now()
+        formatted_time = current_time.strftime("[%m:%d:%Y, %H:%M:%S]")
+        log = f'{formatted_time} - {title} (ID: {id})'
+        
+        # Ex: [01:01:2024, 08:30:34] - Title of Listing (ID: )
+        
+        with open(self.log_file, 'w') as file:
+            file.write(log)
+        
 
 def search_shopebay(search_queries, eb_dupes):
     configure()

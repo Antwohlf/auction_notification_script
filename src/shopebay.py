@@ -10,21 +10,60 @@ def configure():
 def create_file():
     pass
 
+class ShopEbay:
+    def __init__(self):
+        self.json_entries = []
+        self.payload = {}
+        
+    def load_payload(self):
+        with open('query_templates/query_ebay.json') as file:
+            self.payload = json.load(file)
+            
+    def valid_item(self, item, search, eb_dupes):
+        # item already found
+        if id in eb_dupes:
+            return False
+        
+        # item not lower than max price
+        if not (float(item.sellingStatus.currentPrice.value) < float(search[1])):
+            return False
+        
+        #is valid item
+        return True
+    
+    def additional_fields(self, item):
+        try:
+            condition = f'Condition: {item.condition.conditionDisplayName}'
+        except:
+            condition = ""
+        try:
+            watchers = f'Watchers: {item.listingInfo.watchCount}'
+        except:
+            watchers = ""
+        try:
+            endtime = f'Ends on {item.listingInfo.endTime.strftime("%m/%d/%Y at %H:%M:%S UTC")}'
+        except:
+            endtime = "None"
+        
+        return condition, watchers, endtime
+    
+
 def search_shopebay(search_queries, eb_dupes):
     configure()
-    json_entries = []
+    script_class = ShopEbay()
+    # json_entries = []
+    
     try:
         api = Connection(domain='svcs.ebay.com',appid=os.getenv('ebayauth'), config_file=None)
-        with open('query_templates/query_ebay.json') as file:
-            payload = json.load(file)
+        script_class.load_payload()
         
         for search in search_queries:
-            payload['keywords'] = search[0]
-            payload['itemFilter'][1]["value"] = search[1]
+            script_class.payload['keywords'] = search[0]
+            script_class.payload['itemFilter'][1]["value"] = search[1]
             print('Searching ebay for ' + search[0])
 
             try:
-                response = api.execute('findItemsAdvanced', payload)
+                response = api.execute('findItemsAdvanced', script_class.payload)
             except:
                 continue
 
@@ -41,26 +80,15 @@ def search_shopebay(search_queries, eb_dupes):
 
             for item in sorted_items:
                 id = item.itemId
-                if not (float(item.sellingStatus.currentPrice.value)) < float(search[1]) or (id in eb_dupes):
-                    continue
-                else:
+                if script_class.valid_item(item, search, eb_dupes):
                     eb_dupes.add(id)
+                else:
+                    continue
                 
-                try:
-                    condition = f'Condition: {item.condition.conditionDisplayName}'
-                except:
-                    condition = ""
-                try:
-                    watchers = f'Watchers: {item.listingInfo.watchCount}'
-                except:
-                    watchers = ""
-                try:
-                    endtime = f'Ends on {item.listingInfo.endTime.strftime("%m/%d/%Y at %H:%M:%S UTC")}'
-                except:
-                    endtime = "None"
-                
-                title_price_condition_watchers = f'"{item.title}", ${item.sellingStatus.currentPrice.value}, {condition}, {watchers}, {endtime}\n'
                 link = f'{item.viewItemURL}\n'.rstrip()
+                
+                condition, watchers, endtime = script_class.additional_fields(item)
+                
                 # buyitnow = f'Buy it now available: : {item.listingInfo.buyItNowAvailable}\n'
 
                 # If item price in acceptable range
@@ -70,9 +98,9 @@ def search_shopebay(search_queries, eb_dupes):
                         json_entry['Condition'] = condition
                     if watchers:
                         json_entry['Watchers'] = watchers
-                    json_entries.append(json_entry)
+                    script_class.json_entries.append(json_entry)
                         
-        return json_entries
+        return script_class.json_entries
 
     except ConnectionError as e:
         print(e)

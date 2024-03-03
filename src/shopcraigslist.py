@@ -37,6 +37,7 @@ def search_shopcraigslist(search_queries, cl_dupes):
                   image_url = image_tag['src'] if image_tag else 'None'
                   
                   results.append({'TITLE': title, 'PRICE': price, 'LOCATION': location, 'LINK': link, 'IMGURL': image_url, 'AUCTIONEND': 'None'})
+                  
             return results
         else:
             print("Failed to retrieve data from Craigslist.")

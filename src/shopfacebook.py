@@ -48,7 +48,6 @@ def search_marketplace(search_queries, fb_dupes):
                         'AUCTIONEND': 'None'
                     })
 
-            print(parsed_data[0])
             #for item in parsed_data:
             #    print(item)
             
@@ -56,4 +55,10 @@ def search_marketplace(search_queries, fb_dupes):
             return parsed_data
 
 if __name__ == "__main__":
-    search_marketplace()
+    fb_dupes = set()
+    search_queries = [['macbook']]
+    results = search_marketplace(search_queries, fb_dupes)
+    for item in results:
+        print(item)
+        print()
+    

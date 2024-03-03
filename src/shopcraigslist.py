@@ -18,7 +18,11 @@ def search_shopcraigslist(search_queries, cl_dupes):
             for listing in listings:
                 link = listing.find('a')['href']
                 listing_id = link.split("/")[-1]
+                category_tag = listing.find('div', class_='category')
+                category = category_tag.text.strip().lower() if category_tag else 'None'
                 if listing_id in cl_dupes:
+                  continue
+                elif category == 'apa' or category == 'hhh' or category == 'jjj' or category == 'bbb' or category == 'hss':
                   continue
                 else:
                   title = listing.find('div', class_='title').text.strip()

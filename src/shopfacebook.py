@@ -8,22 +8,25 @@ def search_marketplace(search_queries, fb_dupes):
         payload = json.load(file)
         location = "annarbor"
         minPrice = '0'
-        maxPrice = '999'
 
         with sync_playwright() as p:
             browser = p.chromium.launch()
             page = browser.new_page()
             parsed_data = []
             base_url = f'https://facebook.com/marketplace/{location}/search?'
+            
+            # example query {"SEARCH_TERM": "search", "MAX_PRICE": "999"},
+            
             for query in search_queries:
                 url = base_url
+                maxPrice = query['MAX_PRICE']
                 
                 if minPrice:
                     url += f'minPrice={minPrice}&'
                 if maxPrice:
                     url += f'maxPrice={maxPrice}&'
                 
-                url += f'query={query[0]}'
+                url += f'query={query["SEARCH_TERM"]}'
                 
                 page.goto(url)
                 page.wait_for_selector('[aria-label="Collection of Marketplace items"]')

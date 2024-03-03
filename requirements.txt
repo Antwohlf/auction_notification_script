@@ -9,3 +9,4 @@ ebaysdk
 python-dotenv
 clean-text
 regex
+playwright

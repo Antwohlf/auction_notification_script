@@ -27,7 +27,7 @@ class ShopEbay:
             return False
         
         # item not lower than max price
-        if not (float(item.sellingStatus.currentPrice.value) < float(search[1])):
+        if not (float(item.sellingStatus.currentPrice.value) < float(search["MAX_PRICE"])):
             return False
         
         #is valid item
@@ -70,9 +70,9 @@ def search_shopebay(search_queries, eb_dupes):
         script_class.load_payload()
         
         for search in search_queries:
-            script_class.payload['keywords'] = search[0]
-            script_class.payload['itemFilter'][1]["value"] = search[1]
-            print('Searching ebay for ' + search[0])
+            script_class.payload['keywords'] = search["SEARCH_TERM"]
+            script_class.payload['itemFilter'][1]["value"] = search["MAX_PRICE"]
+            print('Searching ebay for ' + search["SEARCH_TERM"])
 
             try:
                 response = api.execute('findItemsAdvanced', script_class.payload)
@@ -104,7 +104,7 @@ def search_shopebay(search_queries, eb_dupes):
                 # buyitnow = f'Buy it now available: : {item.listingInfo.buyItNowAvailable}\n'
 
                 # If item price in acceptable range
-                if not (float(item.sellingStatus.currentPrice.value) > float(search[1])):
+                if not (float(item.sellingStatus.currentPrice.value) > float(search["MAX_PRICE"])):
                     json_entry = {"IMGURL": item.galleryURL, "LINK": link, "TITLE": item.title, "AUCTIONEND": endtime, "PRICE": item.sellingStatus.currentPrice.value}
                     if condition:
                         json_entry['Condition'] = condition

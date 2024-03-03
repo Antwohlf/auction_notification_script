@@ -28,7 +28,7 @@ def send_email_standardized(destination_email, results_shopgoodwill, results_eba
     DATE        = datetime.date.today().day                # the current day
     HOUR        = datetime.datetime.now().strftime("%H")   # the current hour
     time_string = str(MONTH) + '/' + str(DATE) + '/' + str(YEAR) + ' - ' + str(HOUR) + ":00 UTC"
-    subject_time = "New Goodwill/Ebay Listings " + time_string
+    subject_time = "New Item Listings " + time_string
 
     # contents can be a list of elements including strings and yagmail.inline objects
     contents = []

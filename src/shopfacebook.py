@@ -15,8 +15,6 @@ def search_marketplace(search_queries, fb_dupes):
             parsed_data = []
             base_url = f'https://facebook.com/marketplace/{location}/search?'
             
-            # example query {"SEARCH_TERM": "search", "MAX_PRICE": "999"},
-            
             for query in search_queries:
                 url = base_url
                 maxPrice = query['MAX_PRICE']

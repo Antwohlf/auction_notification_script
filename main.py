@@ -135,8 +135,9 @@ def send_email_standardized(destination_email, results_shopgoodwill, results_eba
             contents.append(f'<img src="{img_url}" alt="Image" width="200" height="200">')
 
             title = item["TITLE"]
+            clean_title = clean(title, no_emoji=True)
             link = item["LINK"]
-            contents.append(f'<a href="{link}">' + title + '</a>')
+            contents.append(f'<a href="{link}">' + clean_title + '</a>')
 
             price = item["PRICE"]
             contents.append("Price: " + str(price))
@@ -150,6 +151,8 @@ def send_email_standardized(destination_email, results_shopgoodwill, results_eba
     
 
     if contents:
+        # print('CONTENTS --')
+        # print(contents)
         yag.send(destination_email, subject = subject_time, contents = contents)
 
 if __name__ == '__main__':

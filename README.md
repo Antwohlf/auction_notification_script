@@ -1,15 +1,19 @@
 # Auction Notification Script
 
-As of early 2023, this script is used for searching for a list of queries on ShopGoodWill and Ebay, notifying the user of new items that match those searches via email at a regular cadence.
+As of mid 2024, this script is used for searching for a list of queries on the following sites
+ - ShopGoodWill
+ - Ebay
+ - Facebook Marketplace
+ - Craigslist
+notifying the user of new items that match those searches via email at a regular cadence.
 
-We are currently testing methods for other sites such as StockX and Craigslist and will have updates for them later.
+We are currently testing methods for other sites such as StockX and AliExpress and will have updates for them later.
 
 ## How to use the script
 ### Getting started
 - Pull the repo onto your local workspace
 - Run 'pip3 install -r requirements.txt'
 - Set up a name.json file for your desired searches profile using the profile.json example from the repo as a reference
-  - The format is ["item", maxPrice] where the first argument is a string for the search term and the second is the max price to be filtered
   - Include your email in the "email" section so the script knows where to send the notifications
 
 ### ShopGoodWill Config
@@ -17,6 +21,12 @@ This should require no auth config on the user's side.
 
 ### Ebay Config
 This will require registering for Ebay API access and keeping your credentials in a LOCAL .env file
+
+### Facebook Marketplace Config
+This will require manual selection of a location as the results are localized
+
+### Craigslist Config
+This will require manual selection of a location as Craigslist is divided into localized sub domains
 
 ### Running the script
 - Run 'python3 main.py'

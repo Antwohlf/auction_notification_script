@@ -19,146 +19,58 @@ import re
 # TODO link on auction end date to add to google calendar
 # TODO enable last minute notifications for auctions
 
+def add_email_content(website_name, contents, results):
+    ## TODO update website_name to be constants
+    contents.append("<h3 style='text-transform: uppercase;'> " + website_name + " Results:</h3>\n")
+    try:
+        for item in results:
+            # The line is an image URL, so add it as an HTML img tag with specified width and height
+            img_url = item["IMGURL"]
+            contents.append(f'<img src="{img_url}" alt="Image" width="200" height="200">')
+
+            title = item["TITLE"]
+            link = item["LINK"]
+            contents.append(f'<a href="{link}">' + title + '</a>')
+
+            price = item["PRICE"]
+            contents.append("Price: " + str(price))
+
+            auction_end = item["AUCTIONEND"]
+            event_name = 'Auction+End'
+            event_url = f'https://www.google.com/calendar/render?action=TEMPLATE&text={event_name}&dates={auction_end}/{auction_end}'
+            contents.append(f'<a href="{event_url}">Add to Google Calendar</a>') 
+    except Exception as e:
+        print(f"Issue encountered with %s script - Error: {e}", website_name)
+
 def send_email_standardized(destination_email, results_shopgoodwill, results_ebay, results_shopcraigslist, results_uofmdispo, results_facebook):
     # using yagmail from https://github.com/kootenpv/yagmail
     yag = yagmail.SMTP(os.getenv('email'), oauth2_file='oauth.json')
 
-    YEAR        = datetime.date.today().year               # the current year
-    MONTH       = datetime.date.today().month              # the current month
-    DATE        = datetime.date.today().day                # the current day
-    HOUR        = datetime.datetime.now().strftime("%H")   # the current hour
-    time_string = str(MONTH) + '/' + str(DATE) + '/' + str(YEAR) + ' - ' + str(HOUR) + ":00 UTC"
-    subject_time = "New Item Listings " + time_string
+    CURRENT_YEAR        = datetime.date.today().year               
+    CURRENT_MONTH       = datetime.date.today().month            
+    CURRENT_DATE        = datetime.date.today().day               
+    CURRENT_HOUR        = datetime.datetime.now().strftime("%H") 
+    time_string = str(CURRENT_MONTH) + '/' + str(CURRENT_DATE) + '/' + str(CURRENT_YEAR) + ' - ' + str(CURRENT_HOUR) + ":00 UTC"
+    subject_time = "New Item Listings " + time_string # TODO make this a one liner using datetime str formatting
 
-    # contents can be a list of elements including strings and yagmail.inline objects
+    # Contents can be a list of elements, including strings and yagmail.inline objects
     contents = []
 
-    '''
-    # SHOPGOODWILL RUN
-    contents.append("<h3 style='text-transform: uppercase;'>ShopGoodWill Results:</h3>\n")
-    try:
-        for item in results_shopgoodwill:
-            # The line is an image URL, so add it as an HTML img tag with specified width and height
-            img_url = item["IMGURL"]
-            contents.append(f'<img src="{img_url}" alt="Image" width="200" height="200">')
-
-            title = item["TITLE"]
-            link = item["LINK"]
-            contents.append(f'<a href="{link}">' + title + '</a>')
-
-            price = item["PRICE"]
-            contents.append("Price: " + str(price))
-
-            auction_end = item["AUCTIONEND"]
-            event_name = 'Auction+End'
-            event_url = f'https://www.google.com/calendar/render?action=TEMPLATE&text={event_name}&dates={auction_end}/{auction_end}'
-            contents.append(f'<a href="{event_url}">Add to Google Calendar</a>') 
-    except Exception as e:
-        print(f"Issue encountered with ShopGoodwill script - Error: {e}")
-
-    # EBAY RUN
-    #TODO ADD END TIME
-    contents.append("<h3 style='text-transform: uppercase;'>Ebay Results:</h3>\n")
-    try:
-        for item in results_ebay:
-            # The line is an image URL, so add it as an HTML img tag with specified width and height
-            img_url = item["IMGURL"]
-            contents.append(f'<img src="{img_url}" alt="Image" width="200" height="200">')
-
-            title = item["TITLE"]
-            link = item["LINK"]
-            contents.append(f'<a href="{link}">' + title + '</a>')
-
-            price = item["PRICE"]
-            contents.append("Current Price: " + price)
-
-            auction_end = item["AUCTIONEND"]
-            event_name = 'Auction+End'
-            contents.append("Auction End:" + auction_end)
-            event_url = f'https://www.google.com/calendar/render?action=TEMPLATE&text={event_name}&dates={auction_end}/{auction_end}'
-            contents.append(f'<a href="{event_url}">Add to Google Calendar</a>') 
-    except Exception as e:
-        print(f"Issue encountered with Ebay script - Error: {e}")
-
-    # SHOPCRAIGSLIST RUN
-    contents.append("<h3 style='text-transform: uppercase;'>ShopCraigslist Results:</h3>\n")
-    try:
-        for item in results_shopcraigslist:
-            # The line is an image URL, so add it as an HTML img tag with specified width and height
-            img_url = item["IMGURL"]
-            contents.append(f'<img src="{img_url}" alt="Image" width="200" height="200">')
-
-            title = item["TITLE"]
-            link = item["LINK"]
-            contents.append(f'<a href="{link}">' + title + '</a>')
-
-            price = item["PRICE"]
-            contents.append("Price: " + str(price))
-
-            auction_end = item["AUCTIONEND"]
-            event_name = 'Auction+End'
-            event_url = f'https://www.google.com/calendar/render?action=TEMPLATE&text={event_name}&dates={auction_end}/{auction_end}'
-            contents.append(f'<a href="{event_url}">Add to Google Calendar</a>') 
-    except Exception as e:
-        print(f"Issue encountered with ShopCraigslist script - Error: {e}")
-
-
-    # SHOPUMDISPO RUN
-    contents.append("<h3 style='text-transform: uppercase;'>ShopUMDispo Results:</h3>\n")
-    try:
-        for item in results_uofmdispo:
-            # The line is an image URL, so add it as an HTML img tag with specified width and height
-            img_url = item["IMGURL"]
-            contents.append(f'<img src="{img_url}" alt="Image" width="200" height="200">')
-
-            title = item["TITLE"]
-            link = item["LINK"]
-            contents.append(f'<a href="{link}">' + title + '</a>')
-
-            price = item["PRICE"]
-            contents.append("Price: " + str(price))
-
-            auction_end = item["AUCTIONEND"]
-            event_name = 'Auction+End'
-            event_url = f'https://www.google.com/calendar/render?action=TEMPLATE&text={event_name}&dates={auction_end}/{auction_end}'
-            contents.append(f'<a href="{event_url}">Add to Google Calendar</a>') 
-    except Exception as e:
-        print(f"Issue encountered with UM Dispo script - Error: {e}")
-    '''
-
-    # SHOPFACEBOOK RUN
-    contents.append("<h3 style='text-transform: uppercase;'>ShopFacebook Results:</h3>\n")
-    try:
-        for item in results_facebook:
-            # The line is an image URL, so add it as an HTML img tag with specified width and height
-            img_url = item["IMGURL"]
-            contents.append(f'<img src="{img_url}" alt="Image" width="200" height="200">')
-
-            title = item["TITLE"]
-            clean_title = clean(title, no_emoji=True)
-            link = item["LINK"]
-            contents.append(f'<a href="{link}">' + clean_title + '</a>')
-
-            price = item["PRICE"]
-            contents.append("Price: " + str(price))
-
-            auction_end = item["AUCTIONEND"]
-            event_name = 'Auction+End'
-            event_url = f'https://www.google.com/calendar/render?action=TEMPLATE&text={event_name}&dates={auction_end}/{auction_end}'
-            contents.append(f'<a href="{event_url}">Add to Google Calendar</a>') 
-    except Exception as e:
-        print(f"Issue encountered with ShopFacebook script - Error: {e}")
-    
+    add_email_content('ShopGoodWill', contents, results_shopgoodwill)
+    add_email_content('Ebay', contents, results_ebay)
+    add_email_content('Craigslist', contents, results_shopcraigslist)
+    add_email_content('Facebook', contents, results_facebook)
+    add_email_content('UM Dispo', contents, results_uofmdispo)
 
     if contents:
-        # print('CONTENTS --')
-        # print(contents)
+        print('CONTENTS --')
+        print(contents)
         yag.send(destination_email, subject = subject_time, contents = contents)
 
 if __name__ == '__main__':
     profile_name = input('Select a profile: ')
     profile_path = "profiles/" + profile_name + ".json"
-    gw_dupes, eb_dupes, cl_dupes, um_dupes, fb_dupes = set(), set(), set(), set(), set()
+    gw_dupes, eb_dupes, cl_dupes, um_dupes, fb_dupes = set(), set(), set(), set(), set() # TODO make this cleaner
 
     while(True):
         with open(profile_path) as f:
@@ -167,13 +79,39 @@ if __name__ == '__main__':
         search_queries = profile["searchQueries"]
         destination_email = profile["email"]
 
-        # NEW RESULTS FORMAT
-        results_shopgoodwill = search_shopgoodwill(search_queries, gw_dupes)
-        results_ebay = search_shopebay(search_queries, eb_dupes)
-        results_craigslist = search_shopcraigslist(search_queries, cl_dupes)
-        #results_uofmdispo = search_shopuofmdispo(search_queries, um_dupes)
+
+        # Initialize results dictionaries
+        results_shopgoodwill = {}
+        results_ebay = {}
+        results_craigslist = {}
         results_uofmdispo = {}
-        results_facebook = search_marketplace(search_queries, fb_dupes)
+        results_facebook = {}
+
+        # Attempt to fetch results, catching any exceptions and continuing if there's a failure
+        try:
+            results_shopgoodwill = search_shopgoodwill(search_queries, gw_dupes)
+        except Exception as e:
+            print(f"Error in search_shopgoodwill: {e}")
+
+        try:
+            results_ebay = search_shopebay(search_queries, eb_dupes)
+        except Exception as e:
+            print(f"Error in search_shopebay: {e}")
+
+        try:
+            results_craigslist = search_shopcraigslist(search_queries, cl_dupes)
+        except Exception as e:
+            print(f"Error in search_shopcraigslist: {e}")
+
+        try:
+            results_facebook = search_marketplace(search_queries, fb_dupes)
+        except Exception as e:
+            print(f"Error in search_marketplace: {e}")
+
+        try:
+            results_uofmdispo = search_shopuofmdispo(search_queries, um_dupes)
+        except Exception as e:
+            print(f"Error in search_ufomdispo: {e}")
         
         send_email_standardized(destination_email, results_shopgoodwill, results_ebay, results_craigslist, results_uofmdispo, results_facebook)
 

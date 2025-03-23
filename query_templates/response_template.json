@@ -1,0 +1,14 @@
+[
+    {
+        "IMGURL": "url_here",
+        "LINK": "url_here",
+        "TITLE": "title_here",
+        "AUCTIONEND": "time_here"
+    },
+    {
+        "IMGURL": "url_here",
+        "LINK": "url_here",
+        "TITLE": "title_here",
+        "AUCTIONEND": "time_here"
+    }
+]

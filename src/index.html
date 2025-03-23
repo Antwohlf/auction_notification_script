@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Toggle Page</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .profile-toggle {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .profile-toggle button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+        .profile-toggle button.active {
+            background-color: #007bff;
+        }
+        .search-list {
+            width: 80%;
+            max-width: 600px;
+        }
+        .search-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .search-item input[type="text"] {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 5px;
+            width: 40%;
+        }
+        .search-item input[type="checkbox"] {
+            margin: 0 10px;
+        }
+        .search-item button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        .add-button, .update-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-toggle">
+        <button class="active" onclick="switchProfile('Anthony')">Anthony</button>
+        <button onclick="switchProfile('Nick')">Nick</button>
+        <button onclick="switchProfile('CJ')">CJ</button>
+    </div>
+    <div class="search-list">
+        <div class="search-item">
+            <input type="text" value="university of michiga">
+            <label><input type="checkbox"> ShopGoodWill</label>
+            <label><input type="checkbox"> Ebay</label>
+            <label><input type="checkbox"> Craigslist</label>
+            <label><input type="checkbox"> UM Dispo</label>
+            <label><input type="checkbox"> Facebook</label>
+            <button>-</button>
+        </div>
+        <div class="search-item">
+            <input type="text" value="mid century modern">
+            <label><input type="checkbox"> ShopGoodWill</label>
+            <label><input type="checkbox"> Ebay</label>
+            <label><input type="checkbox"> Craigslist</label>
+            <label><input type="checkbox"> UM Dispo</label>
+            <label><input type="checkbox"> Facebook</label>
+            <button>-</button>
+        </div>
+        <div class="search-item">
+            <input type="text" value="frank ocean vinyl">
+            <label><input type="checkbox"> ShopGoodWill</label>
+            <label><input type="checkbox"> Ebay</label>
+            <label><input type="checkbox"> Craigslist</label>
+            <label><input type="checkbox"> UM Dispo</label>
+            <label><input type="checkbox"> Facebook</label>
+            <button>-</button>
+        </div>
+        <div class="search-item">
+            <input type="text" value="brockhampton ginge">
+            <label><input type="checkbox"> ShopGoodWill</label>
+            <label><input type="checkbox"> Ebay</label>
+            <label><input type="checkbox"> Craigslist</label>
+            <label><input type="checkbox"> UM Dispo</label>
+            <label><input type="checkbox"> Facebook</label>
+            <button>-</button>
+        </div>
+        <div class="search-item">
+            <input type="text" value="graduation kanye vir">
+            <label><input type="checkbox"> ShopGoodWill</label>
+            <label><input type="checkbox"> Ebay</label>
+            <label><input type="checkbox"> Craigslist</label>
+            <label><input type="checkbox"> UM Dispo</label>
+            <label><input type="checkbox"> Facebook</label>
+            <button>-</button>
+        </div>
+        <div class="search-item">
+            <input type="text" value="ninja pig plush">
+            <label><input type="checkbox"> ShopGoodWill</label>
+            <label><input type="checkbox"> Ebay</label>
+            <label><input type="checkbox"> Craigslist</label>
+            <label><input type="checkbox"> UM Dispo</label>
+            <label><input type="checkbox"> Facebook</label>
+            <button>-</button>
+        </div>
+        <button class="add-button">+</button>
+    </div>
+    <button class="update-button">Update</button>
+
+    <script>
+        function switchProfile(profile) {
+            const buttons = document.querySelectorAll('.profile-toggle button');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+            document.querySelector(`.profile-toggle button[onclick="switchProfile('${profile}')"]`).classList.add('active');
+        }
+    </script>
+</body>
+</html>

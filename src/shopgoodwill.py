@@ -58,7 +58,6 @@ def search_shopgoodwill(search_queries, gw_dupes):
     with open("query_templates/query_goodwill.json") as sgw_query:
         search_query = json.load(sgw_query)
 
-    email_string = ""
     for search in search_queries:
         print('Searching shopgoodwill for ' + search["SEARCH_TERM"])
         # Update JSON value for searching here
@@ -68,9 +67,6 @@ def search_shopgoodwill(search_queries, gw_dupes):
 
         # Sort the search results by endTime in ascending order (Ending Soonest)
         sorted_results = sorted(search_results, key=lambda item: item['endTime'])
-
-        if sorted_results:
-            email_string += '<strong>' + str(search_query['searchText']) + '</strong>\n'
 
         item_list = []
 
@@ -87,6 +83,7 @@ def search_shopgoodwill(search_queries, gw_dupes):
             important_content = (item['title'], "$" + str(item['currentPrice']), formatted_datetime)
             if item['itemId'] not in gw_dupes:
                 # urllib.request.urlretrieve("http://www.digimouth.com/news/media/2011/09/google-logo.jpg", "local-filename.jpg")
+                # TODO check if this comment was a better way of getting the image
                 item_json["IMGURL"] = script_class.transform_url(item['imageURL'])
                 item_json["AUCTIONEND"] = google_calendar_datetime
                 item_json["LINK"] = "https://shopgoodwill.com/item/" + str(item['itemId'])
@@ -94,13 +91,10 @@ def search_shopgoodwill(search_queries, gw_dupes):
 
                 item_json["PRICE"] = item['currentPrice']
 
-                email_string += str(important_content) + "\n"
                 gw_dupes.add(item['itemId'])
-                item_list.append(item_json)
-            
+                item_list.append(item_json)   
 
     return item_list
-
         
 
 if __name__ == '__main__':

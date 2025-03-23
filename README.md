@@ -1,8 +1,8 @@
 # Auction Notification Script
 
-As of early 2023, this script is used for searching for a list of queries on ShopGoodWill and Ebay, notifying the user of new items that match those searches via email at a regular cadence.
+As of late 2024, this script is used to search for a list of queries on ShopGoodWill, Ebay, Craigslist, and Facebook Marketplace while notifying the user of new items that match those searches via email at a regular cadence.
 
-We are currently testing methods for other sites such as StockX and Craigslist and will have updates for them later.
+We are currently testing methods for other sites such as StockX and AliExpress and will have updates for them later.
 
 ## How to use the script
 ### Getting started
